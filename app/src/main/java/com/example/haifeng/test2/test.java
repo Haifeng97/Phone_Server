@@ -21,8 +21,6 @@ import java.lang.reflect.Type;
 public class test extends AppCompatActivity{
 
     private SensorManager sensorManager;
-    private SensorManager sensorManager2;
-    private SensorManager sensorManager3;
     TextView tv;
     TextView tv2;
     TextView tv3;
@@ -51,21 +49,22 @@ public class test extends AppCompatActivity{
         Sensor sensor2 = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         Sensor sensor3 = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
         sensorManager.registerListener(listener2, sensor2, SensorManager.SENSOR_DELAY_NORMAL);
-        sensorManager.registerListener(listener, sensor,SensorManager.SENSOR_DELAY_NORMAL);
+        sensorManager.registerListener(listener, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+        //sensorManager.registerListener(listener3, sensor3, SensorManager.SENSOR_DELAY_NORMAL);
+
+        sensorManager.registerListener(listener4, sensor2, SensorManager.SENSOR_DELAY_GAME);
+        sensorManager.registerListener(listener4, sensor3, SensorManager.SENSOR_DELAY_GAME);
 
     }
-
+//Destroy
     @Override
     protected void onDestroy() {
         super.onDestroy();
         if (sensorManager != null) {
             sensorManager.unregisterListener(listener);
-        }
-        if (sensorManager2 != null) {
-            sensorManager2.unregisterListener(listener2);
-        }
-        if (sensorManager3 != null) {
-            sensorManager3.unregisterListener(listener3);
+            sensorManager.unregisterListener(listener2);
+            //sensorManager.unregisterListener(listener3);
+            sensorManager.unregisterListener(listener4);
         }
     }
 
@@ -83,11 +82,52 @@ public class test extends AppCompatActivity{
         }
     };
 
-    private SensorEventListener l2 = new SensorEventListener() {
+    private SensorEventListener listener2 = new SensorEventListener() {
         @Override
         public void onSensorChanged(SensorEvent sensorEvent) {
-            tv3.setText("x is " + sensorEvent.values[0] + "y is " + sensorEvent.values[1] + "z is " + sensorEvent.values[2]);
+            //tv3.setText("x is " + sensorEvent.values[0] + "y is " + sensorEvent.values[1] + "z is " + sensorEvent.values[2]);
+            tv2.setText("v0 " + sensorEvent.values[0]);
+            tv3.setText("v1 " + sensorEvent.values[1]);
+            tv4.setText("v2 " + sensorEvent.values[2]);
+        }
 
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int i) {
+
+        }
+    };
+
+//    private SensorEventListener listener3 = new SensorEventListener() {
+//        @Override
+//        public void onSensorChanged(SensorEvent sensorEvent) {
+//            tv5.setText("v0 " + sensorEvent.values[0]);
+//            tv6.setText("v1 " + sensorEvent.values[1]);
+//            tv7.setText("v2 " + sensorEvent.values[2]);
+//        }
+//
+//        @Override
+//        public void onAccuracyChanged(Sensor sensor, int i) {
+//
+//        }
+//    };
+//Accelerator and mag
+    private SensorEventListener listener4 = new SensorEventListener() {
+    float[] aValues = new float[3];
+    float[] mValues = new float[3];
+        @Override
+        public void onSensorChanged(SensorEvent sensorEvent) {
+            if (sensorEvent.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+                aValues = sensorEvent.values.clone();
+            } else if (sensorEvent.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
+                mValues = sensorEvent.values.clone();
+            }
+            float[] R = new float[9];
+            float[] values = new float[3];
+            SensorManager.getRotationMatrix(R, null, aValues, mValues);
+            SensorManager.getOrientation(R, values);
+            tv5.setText("v0 is " + Math.toDegrees(values[0]));
+            tv6.setText("v1 is " + Math.toDegrees(values[1]));
+            tv7.setText("v2 is " + Math.toDegrees(values[2]));
         }
 
         @Override
