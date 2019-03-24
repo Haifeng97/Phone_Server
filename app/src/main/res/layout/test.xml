@@ -45,6 +45,33 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tv7"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="status"
+        android:textSize="20sp"
+        android:id="@+id/tv8"/>
+    <EditText
+        android:layout_width="200sp"
+        android:layout_height="wrap_content"
+        android:text="1586"
+        android:id="@+id/edit_port"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="listen"
+        android:id="@+id/bt1"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="send"
+        android:id="@+id/bt_send"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/bt_close"
+        android:text="close"/>
+
 
 
 </LinearLayout>
